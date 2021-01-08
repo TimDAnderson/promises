@@ -8,13 +8,41 @@
  * HINT: We exported some similar promise-returning functions in previous exercises
  */
 
-var fs = require('fs');
+// var fs = require('fs');
+// var Promise = require('bluebird');
+
 var Promise = require('bluebird');
+var fs = require('fs');
+// const request = require('request');
+const rp = Promise.promisify(require('request'));
 
 
 
 var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
-  // TODO
+  // // TODO
+  // return new promise constructor
+  return new Promise ((resolve, reject) => {
+    // use fs promise to read file
+    fs.promises.readFile(readFilePath, 'utf-8')
+    // get username from file data
+      .then((data) => {
+        let gitHandle = data.split('\n')[0];
+        return gitHandle;
+      })
+    // pass username into api request
+      .then((gitHandle)=>{
+        rp(`https://api.github.com/users/${gitHandle}`)
+        // get response from api request
+          .then((profile) => {
+            // send response into writefilepath
+            fs.promises.writeFile(writeFilePath, profile.body)
+            //resolve response 
+              .then(()=>{
+                resolve();
+              });
+          });
+      });
+  });
 };
 
 // Export these functions so we can test them
