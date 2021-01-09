@@ -13,7 +13,6 @@
 
 var Promise = require('bluebird');
 var fs = require('fs');
-// const request = require('request');
 const rp = Promise.promisify(require('request'));
 
 
@@ -26,8 +25,7 @@ var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
     fs.promises.readFile(readFilePath, 'utf-8')
     // get username from file data
       .then((data) => {
-        let gitHandle = data.split('\n')[0];
-        return gitHandle;
+        return data.split('\n')[0];
       })
     // pass username into api request
       .then((gitHandle)=>{
@@ -49,3 +47,6 @@ var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
 module.exports = {
   fetchProfileAndWriteToFile: fetchProfileAndWriteToFile
 };
+
+
+// fetchProfileAndWriteToFile('./timsGit.txt', './timsGit.txt');
